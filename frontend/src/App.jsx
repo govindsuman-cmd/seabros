@@ -60,7 +60,6 @@ function App() {
           <Route path="/login" element={<Login />} />
           <Route path="/join/:jobId" element={<JoinUs />} />
           
-          <Route path="/create-product" element={<CreateProduct />} />
           <Route path="/get-all-jobs" element={<GetJob />} />
           <Route path="/privacy-policy" element={<PrivacyPolicy/>} />
           <Route path="/refund-policy" element={<RefundPolicy/>} />
@@ -74,6 +73,14 @@ function App() {
             element={
               <PrivateRoute roles={["Admin", "Employee"]}>
                 <CreateJob />
+              </PrivateRoute>
+            }
+          />
+          <Route
+            path="/create-product"
+            element={
+              <PrivateRoute roles={["Admin", "Employee"]}>
+                <CreateProduct />
               </PrivateRoute>
             }
           />
