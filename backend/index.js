@@ -15,7 +15,7 @@ app.use(express.urlencoded({ extended: true }));
 cloudinaryConnect(); // 👉 invoking the function here
 app.use(
   cors({
-    origin: ['*'], // adjust for prod
+    origin: ['http://localhost:5173'], // adjust for prod
     credentials: true,
   })
 );
