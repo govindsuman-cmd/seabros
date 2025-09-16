@@ -15,7 +15,7 @@ app.use(express.urlencoded({ extended: true }));
 cloudinaryConnect(); // 👉 invoking the function here
 app.use(
   cors({
-    origin: ['http://localhost:5173'], // adjust for prod
+    origin: ['https://seabros-frontend.onrender.com/'], // adjust for prod
     credentials: true,
   })
 );
