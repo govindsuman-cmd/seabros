@@ -1,4 +1,5 @@
 import { useNavigate } from "react-router-dom";
+import ShoeIcon from "../assets/images/shoeIcon.png";
 
 export default function Home() {
 
@@ -28,7 +29,7 @@ const navigate = useNavigate();
 
         {/* Floating Shoe Image */}
         <img
-          src="https://images.unsplash.com/photo-1606813902782-399a6c7c4e7a"
+          src={ShoeIcon}
           alt="Shoe"
           className="absolute bottom-0 w-[400px] md:w-[550px] object-contain drop-shadow-2xl"
         />
