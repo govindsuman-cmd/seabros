@@ -5,11 +5,6 @@ export default function Home() {
 
 const navigate = useNavigate();
 
-   const handleClick = () => {
-    navigate('/get-all-jobs');
-  };
-
-
   return (
     <div className="flex flex-col">
       {/* Hero Section */}
@@ -22,7 +17,7 @@ const navigate = useNavigate();
           SeaBros Shoes – Crafted for those who dare to stand out.
         </p>
         <button className="mt-8 px-8 py-3 bg-red-500 text-white rounded-full text-lg font-semibold hover:bg-red-600 shadow-lg transition-all"
-         onClick={handleClick}
+         onClick={() => navigate("/")}
         >
           Shop Now
         </button>
@@ -31,7 +26,7 @@ const navigate = useNavigate();
         <img
           src={ShoeIcon}
           alt="Shoe"
-          className="absolute bottom-0 w-[400px] md:w-[550px] object-contain drop-shadow-2xl"
+          className="absolute bottom-0 w-[40px] md:w-[55px] object-contain drop-shadow-2xl"
         />
       </section>
 
@@ -67,7 +62,7 @@ const navigate = useNavigate();
           Join thousands of SeaBros customers and step into the future.
         </p>
         <button className="mt-8 px-10 py-4 bg-red-500 rounded-full text-lg font-semibold hover:bg-red-600 shadow-lg transition-all"
-         onClick={() => window.location.href = '/'}
+         onClick={() => navigate("/")}
         >
           Explore Collection
         </button>

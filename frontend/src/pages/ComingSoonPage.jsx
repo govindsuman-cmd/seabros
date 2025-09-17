@@ -96,7 +96,7 @@ export default function ComingSoonPage() {
         {/* Buttons */}
         <div className="mt-8 flex justify-center gap-4">
           <button className="px-6 py-3 bg-blue-600 text-white text-lg font-semibold rounded-lg shadow-md hover:bg-blue-700 transition"
-            onClick={navigate('/get-all-jobs')}>
+            onClick={() => navigate("/get-all-jobs")}>
            Join US
           </button>
         </div>
