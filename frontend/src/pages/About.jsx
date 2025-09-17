@@ -2,7 +2,15 @@ import React from 'react';
 import Vikram from '../assets/images/VikramSingh.jpg';
 import Meena from '../assets/images/MeenaKumari.jpg';
 import Govind from '../assets/images/Govind.jpg';
+import { useNavigate } from 'react-router-dom';
 const About = () => {
+
+  const navigate = useNavigate();
+
+   const handleClick = () => {
+    navigate('/get-all-jobs');
+  };
+
   return (
     <div className="max-w-6xl mx-auto px-4 py-8">
       <div className="text-center mb-12">
@@ -146,7 +154,7 @@ const About = () => {
           openings.
         </p>
         <button className="bg-blue-600 hover:bg-blue-700 text-white font-medium py-2 px-6 rounded-lg transition duration-300"
-         onClick={() => window.location.href = '/get-all-jobs'}
+         onClick={handleClick}
         >
           View Careers
         </button>

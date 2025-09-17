@@ -1,4 +1,14 @@
+import { useNavigate } from "react-router-dom";
+
 export default function Home() {
+
+const navigate = useNavigate();
+
+   const handleClick = () => {
+    navigate('/get-all-jobs');
+  };
+
+
   return (
     <div className="flex flex-col">
       {/* Hero Section */}
@@ -11,7 +21,7 @@ export default function Home() {
           SeaBros Shoes – Crafted for those who dare to stand out.
         </p>
         <button className="mt-8 px-8 py-3 bg-red-500 text-white rounded-full text-lg font-semibold hover:bg-red-600 shadow-lg transition-all"
-         onClick={() => window.location.href = '/'}
+         onClick={handleClick}
         >
           Shop Now
         </button>

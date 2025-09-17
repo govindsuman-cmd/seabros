@@ -18,20 +18,20 @@ export default function Footer() {
           </h3>
           <ul className="space-y-2">
             <li>
-              <a href="/return-policy" className="hover:text-blue-300 transition">Return Policy</a>
-            </li>
-            <li>
-              <a href="/refund-policy" className="hover:text-blue-300 transition">Refund Policy</a>
-            </li>
-            <li>
-              <a href="/privacy-policy" className="hover:text-blue-300 transition">Privacy Policy</a>
-            </li>
-            <li>
-              <a href="/terms-and-conditions" className="hover:text-blue-300 transition">Terms & Conditions</a>
-            </li>
-            <li>
-              <a href="/disclaimer" className="hover:text-blue-300 transition">Disclaimer</a>
-            </li>
+  <Link href="/return-policy" className="hover:text-blue-300 transition">Return Policy</Link>
+</li>
+<li>
+  <Link href="/refund-policy" className="hover:text-blue-300 transition">Refund Policy</Link>
+</li>
+<li>
+  <Link href="/privacy-policy" className="hover:text-blue-300 transition">Privacy Policy</Link>
+</li>
+<li>
+  <Link href="/terms-and-conditions" className="hover:text-blue-300 transition">Terms & Conditions</Link>
+</li>
+<li>
+  <Link href="/disclaimer" className="hover:text-blue-300 transition">Disclaimer</Link>
+</li>
           </ul>
         </div>
       </div>
