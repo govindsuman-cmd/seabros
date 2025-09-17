@@ -1,3 +1,5 @@
+import { Link } from "react-router-dom";
+
 export default function Footer() {
   return (
     <footer className="bg-gradient-to-r from-blue-500 via-blue-500 to-blue-700 text-gray-100 py-12 mt-20">
@@ -18,19 +20,19 @@ export default function Footer() {
           </h3>
           <ul className="space-y-2">
             <li>
-  <Link href="/return-policy" className="hover:text-blue-300 transition">Return Policy</Link>
+  <Link to="/return-policy" className="hover:text-blue-300 transition">Return Policy</Link>
 </li>
 <li>
-  <Link href="/refund-policy" className="hover:text-blue-300 transition">Refund Policy</Link>
+  <Link to="/refund-policy" className="hover:text-blue-300 transition">Refund Policy</Link>
 </li>
 <li>
-  <Link href="/privacy-policy" className="hover:text-blue-300 transition">Privacy Policy</Link>
+  <Link to="/privacy-policy" className="hover:text-blue-300 transition">Privacy Policy</Link>
 </li>
 <li>
-  <Link href="/terms-and-conditions" className="hover:text-blue-300 transition">Terms & Conditions</Link>
+  <Link to="/terms-and-conditions" className="hover:text-blue-300 transition">Terms & Conditions</Link>
 </li>
 <li>
-  <Link href="/disclaimer" className="hover:text-blue-300 transition">Disclaimer</Link>
+  <Link to="/disclaimer" className="hover:text-blue-300 transition">Disclaimer</Link>
 </li>
           </ul>
         </div>
