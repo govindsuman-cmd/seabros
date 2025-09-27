@@ -5,7 +5,7 @@ const bcrypt = require("bcryptjs");
 exports.signup=async(req,res)=>{
     try{
        const { name, email, password, phone, address, role } = req.body || {};
-        console.log("REQ BODY:", req.body);
+      
        switch (true) {
   case !name:
     return res.status(403).json({
