@@ -1,25 +1,40 @@
-const express= require("express");
+const express = require("express");
 const router = express.Router();
 const upload = require("../utils/multer");
 
-const { createCandidate, getAllCandidate, getCandidateJobWise, getSingleCandidate, deleteCandidate, shortlistCandidate, rejectCandidate } = require("../controllers/candidateController");
-const { isCustomer, isAdmin, auth } = require("../middleware/authn");
-//const { auth, isAdmin } = require("../middleware/authn");
+const {
+  createCandidatePaymentOrder,
+  verifyPaymentAndCreateCandidate,
+  getAllCandidate,
+  getCandidateJobWise,
+  getSingleCandidate,
+  deleteCandidate,
+  shortlistCandidate,
+  rejectCandidate,
+} = require("../controllers/candidateController");
 
+const { auth, isCustomer, isAdmin } = require("../middleware/authn");
+
+// 1️⃣ Step 1: Generate Razorpay order for candidate payment
+router.post("/create-candidate-order", createCandidatePaymentOrder);
+
+// 2️⃣ Step 2: Verify payment & create candidate
 router.post(
-  "/create-candidate",
+  "/verify-payment-and-create-candidate",
   upload.fields([
     { name: "resume", maxCount: 1 },
     { name: "idProof", maxCount: 1 },
-    { name: "domicile", maxCount: 1 }
+    { name: "domicile", maxCount: 1 },
   ]),
-  createCandidate
+  verifyPaymentAndCreateCandidate
 );
-router.get('/get-single-candidate/:id', getSingleCandidate) // test route to check if auth is working
-router.get("/get-all-candidate", getAllCandidate)
-router.get("/get-candidate-jobwise/:jobId", getCandidateJobWise) // to get candidates for a specific job
-router.delete("/delete-candidate/:id",deleteCandidate)
-router.put("/shortlist-candidate/:id", shortlistCandidate)
-router.put("/reject-candidate/:id", rejectCandidate)
+
+// Other candidate routes
+router.get("/get-single-candidate/:id", auth, getSingleCandidate);
+router.get("/get-all-candidate", auth, getAllCandidate);
+router.get("/get-candidate-jobwise/:jobId", auth, getCandidateJobWise);
+router.delete("/delete-candidate/:id", auth, deleteCandidate);
+router.put("/shortlist-candidate/:id", auth, shortlistCandidate);
+router.put("/reject-candidate/:id", auth, rejectCandidate);
 
 module.exports = router;

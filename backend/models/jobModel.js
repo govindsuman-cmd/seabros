@@ -37,6 +37,10 @@ const jobSchema = new mongoose.Schema({
     applicationDeadline: {
         type: Date,
     },
+    applicationFee: {
+        type: Number,
+        default: 0
+    },
     skills: {
         type: [String],
         required: true

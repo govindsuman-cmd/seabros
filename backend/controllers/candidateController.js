@@ -1,50 +1,73 @@
 const Candidate = require("../models/candidateModel");
-const  {uploadImageToCloudinary}  = require("../utils/imageUploader");
 const Job = require("../models/jobModel");
+const { uploadImageToCloudinary } = require("../utils/imageUploader");
+const razorpayInstance = require("../config/razorpay"); // Razorpay instance
+const crypto = require("crypto");
+const { v4: uuidv4 } = require("uuid");
 
-exports.createCandidate = async (req, res, next) => {
+exports.createCandidatePaymentOrder = async (req, res, next) => {
   try {
-    const {
-      name,
-      age,
-      email,
-      nationality,
-      qualification,
-      experience,
-      experienceAs,
-      address,
-      date,
-      time,
-      skills,
-      jobId, // ✅ job applied for
-    } = req.body;
+    const { jobId, email } = req.body;
 
-    if (!jobId) {
-      return res.status(400).json({ message: "Job ID is required" });
-    }
+    if (!jobId || !email) return res.status(400).json({ message: "Job ID and Email are required" });
 
-    // Check if job exists
     const job = await Job.findById(jobId);
-    if (!job) {
-      return res.status(404).json({ message: "Job not found" });
-    }
+    if (!job) return res.status(404).json({ message: "Job not found" });
 
-    // Check if candidate already applied with same email for this job
+    // Candidate already applied?
     const existingCandidate = await Candidate.findOne({ email, jobAppliedFor: jobId });
-    if (existingCandidate) {
-      return res.status(400).json({ message: "Candidate already applied for this job" });
+    if (existingCandidate) return res.status(400).json({ message: "Candidate already applied for this job" });
+
+   const shortEmail = email.split("@")[0]; // only username part
+const receipt = `job_${job._id}_${shortEmail}_${Date.now()}`.slice(0, 40);
+
+    // Create Razorpay order
+    const order = await razorpayInstance.orders.create({
+      amount: job.applicationFee * 100, // in paise
+      currency: "INR",
+      receipt,
+    });
+
+    res.status(200).json({
+      success: true,
+      order,
+      key: process.env.RAZORPAY_KEY_ID,
+      receipt,
+    });
+
+  } catch (error) {
+    res.status(500).json({
+      success: false,
+      message: `Error creating payment order ${error.message}`,
+      error: error.message,
+    });
+  }
+};
+
+exports.verifyPaymentAndCreateCandidate = async (req, res, next) => {
+  try {
+    const { razorpay_order_id, razorpay_payment_id, razorpay_signature, receipt, jobId } = req.body;
+
+    // Verify payment
+    const generatedSignature = crypto
+      .createHmac("sha256", process.env.RAZORPAY_SECRET)
+      .update(`${razorpay_order_id}|${razorpay_payment_id}`)
+      .digest("hex");
+
+    if (generatedSignature !== razorpay_signature) {
+      return res.status(400).json({ message: "Payment verification failed" });
     }
 
-    // Files check
-    const resumeFile = req.files?.['resume']?.[0];
-    const idProofFile = req.files?.['idProof']?.[0];
-    const domicileFile = req.files?.['domicile']?.[0];
+    // Files
+    const resumeFile = req.files?.resume?.[0];
+    const idProofFile = req.files?.idProof?.[0];
+    const domicileFile = req.files?.domicile?.[0];
 
     if (!resumeFile || !idProofFile || !domicileFile) {
       return res.status(400).json({ message: "Resume, ID Proof, and Domicile are required" });
     }
 
-    // Upload files in parallel
+    // Upload files
     const [resumeUrl, idProofUrl, domicileUrl] = await Promise.all([
       uploadImageToCloudinary(resumeFile.path, "resumes"),
       uploadImageToCloudinary(idProofFile.path, "idProofs"),
@@ -53,35 +76,41 @@ exports.createCandidate = async (req, res, next) => {
 
     // Create candidate
     const candidate = new Candidate({
-      name,
-      age: Number(age),
-      email,
-      skills: Array.isArray(skills) ? skills : skills?.split(",").map(s => s.trim()) || [],
-      experience: isNaN(experience) ? 0 : Number(experience),
-      experienceAs: experienceAs?.trim() || "Fresher",
-      qualification,
+      name: req.body.name,
+      age: Number(req.body.age),
+      email: req.body.email,
+      experience: Number(req.body.experience),
+      skills: Array.isArray(req.body.skills)
+        ? req.body.skills
+        : req.body.skills?.split(",").map(s => s.trim()) || [],
+      qualification: req.body.qualification,
       idProof: idProofUrl,
-      address,
-      nationality,
+      address: req.body.address,
+      nationality: req.body.nationality,
       domicile: domicileUrl,
-      interviewDate: new Date(`${date}T${time}`),
+      interviewDate: new Date(`${req.body.date}T${req.body.time}`),
       resume: resumeUrl,
-      jobAppliedFor: jobId, // ✅ Linked job
+      jobAppliedFor: jobId,
+      paymentId: razorpay_payment_id,
+      paymentStatus: "Completed",
+      receipt,
     });
 
     await candidate.save();
-
+    console.log("Candidate created:", candidate);
     res.status(201).json({
       success: true,
-      message: "Candidate created successfully",
+      message: "Candidate application submitted successfully",
       candidate,
     });
 
   } catch (error) {
-    if (error.code === 11000 && error.keyValue?.email) {
-      return res.status(400).json({ message: "Email already exists" });
-    }
-    next(error); // centralized error handler
+    console.error("Error creating candidate:", error);
+    res.status(500).json({
+      success: false,
+      message: `Error creating candidate application ${error.message}`,
+      error: error.message,
+    });
   }
 };
 

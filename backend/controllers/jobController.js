@@ -2,7 +2,7 @@ const Job=require('../models/jobModel');
 
 exports.createJob = async (req, res, next) => {
     try {
-        const { title, description, jobVacancies, requirements, location, salaryRange, jobType, applicationDeadline, skills } = req.body;
+        const { title, description, jobVacancies, requirements, location, salaryRange, jobType, applicationDeadline, skills, applicationFee } = req.body;
         
         const job = new Job({
             title,
@@ -12,6 +12,7 @@ exports.createJob = async (req, res, next) => {
             location,
             salaryRange,    
             jobType,
+            applicationFee: isNaN(applicationFee) ? 0 : Number(applicationFee),
             applicationDeadline: applicationDeadline ? new Date(applicationDeadline) : null,
             skills: Array.isArray(skills) ? skills : skills?.split(",") || []
         });
@@ -87,6 +88,7 @@ exports.editJob = async (req, res, next) => {
       requirements,
       location,
       jobVacancies,
+      applicationFee,
       salaryRange,
       jobType,
       applicationDeadline,
@@ -105,6 +107,7 @@ exports.editJob = async (req, res, next) => {
 
     // Update job fields (only if provided)
     job.title = title || job.title;
+    job.applicationFee= applicationFee ? Number(applicationFee) : job.applicationFee;
     job.description = description || job.description;
     job.requirements = requirements
       ? Array.isArray(requirements)

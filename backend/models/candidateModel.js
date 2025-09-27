@@ -8,7 +8,6 @@ const candidateSchema = new mongoose.Schema({
     email:{
         type: String,
         required: true,
-        unique: true
     },
     jobAppliedFor: {
         type: mongoose.Schema.Types.ObjectId,
@@ -31,10 +30,6 @@ const candidateSchema = new mongoose.Schema({
     },
     experience: {
         type: Number,
-        required: true
-    },  
-    experienceAs: {
-        type: String,   
         required: true
     },
     idProof: {
@@ -61,6 +56,13 @@ const candidateSchema = new mongoose.Schema({
         type: Date,     
         default: Date.now
     },
+    paymentId: { type: String },         // Razorpay payment ID
+    paymentStatus: { 
+    type: String, 
+    enum: ["Pending", "Completed", "Failed"], 
+    default: "Pending" 
+    },
+    receipt: { type: String },          // Razorpay receipt for traceability
     status: {
     type: String,
     enum: ['Pending', 'Approved', 'Rejected'],
