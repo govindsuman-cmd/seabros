@@ -26,7 +26,7 @@ const navigate = useNavigate();
         <img
           src={ShoeIcon}
           alt="Shoe"
-          className="absolute bottom-0 w-[40px] md:w-[55px] object-contain drop-shadow-2xl"
+          className="absolute bottom-0 w-[100px] md:w-[180px] object-contain drop-shadow-2xl"
         />
       </section>
 

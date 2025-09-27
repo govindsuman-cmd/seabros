@@ -23,6 +23,7 @@ import RefundPolicy from "./pages/quicklinks/RefundPolicy";
 import Disclaimer from "./pages/quicklinks/Disclaimer";
 import TermsAndConditions from "./pages/quicklinks/TermsAndCondition";
 import ReturnPolicy from "./pages/quicklinks/ReturnPolicy";
+import JobEditPage from "./pages/employees/JobEditPage";
 
 // Auth Helpers
 const isAuthenticated = () => {
@@ -89,6 +90,14 @@ function App() {
             element={
               <PrivateRoute roles={["Admin", "Employee"]}>
                 <JobsPage />
+              </PrivateRoute>
+            }
+          />
+          <Route
+            path="/jobs/:jobId/edit" // ✅ NEW EDIT ROUTE
+            element={
+              <PrivateRoute roles={["Admin", "Employee"]}>
+                <JobEditPage />
               </PrivateRoute>
             }
           />

@@ -37,6 +37,14 @@ const Login = () => {
         } else {
           navigate("/"); // fallback
         }
+        // After successful login
+setTimeout(() => {
+  localStorage.removeItem("auth");
+  localStorage.removeItem("role");
+  localStorage.removeItem("expiry");
+  navigate("/login");
+}, 2 * 60 * 60 * 1000);
+
       } else {
         setError(res.data.message || "Login failed");
       }

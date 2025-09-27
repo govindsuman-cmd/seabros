@@ -16,7 +16,8 @@ cloudinaryConnect(); // 👉 invoking the function here
 
 const allowedOrigins = [
   "https://seabros-frontend.onrender.com",
-  "https://seabrospvtltd.in", // custom domain for frontend
+  "https://seabrospvtltd.in",
+  "http://localhost:5173" // custom domain for frontend
 ];
 
 

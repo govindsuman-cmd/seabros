@@ -10,7 +10,6 @@ exports.auth = async (req, res, next) => {
       // Log the request headers to see if Authorization header is present
 
       const token = req.headers.authorization?.split(" ")[1];
-        console.log("Authorization Header:", token);
       if (!token) {
           return res.status(401).json({
               success: false,

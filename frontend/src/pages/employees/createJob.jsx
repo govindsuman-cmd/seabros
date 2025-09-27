@@ -56,13 +56,18 @@ const CreateJob = () => {
       skills: jobData.skills.filter((_, i) => i !== index),
     });
   };
-
+  
   const handleSubmit = async (e) => {
     e.preventDefault();
+    const token = localStorage.getItem("auth");
     try {
-      await axios.post(`${import.meta.env.VITE_BASE_URL}/jobs/create-job`, jobData);
+      await axios.post(`${import.meta.env.VITE_BASE_URL}/jobs/create-job`, jobData,  {
+        headers: {
+          Authorization: `Bearer ${token}`, // pass token here
+        },
+      });
       alert("Job created successfully!");
-      navigate("/");
+      navigate("/jobs");
     } catch (err) {
       alert("Error creating job: " + (err.response?.data?.message || err.message));
     }
@@ -163,6 +168,8 @@ const CreateJob = () => {
         </select>
 
         {/* Application Deadline */}
+        <div>
+          <label className="block font-semibold mb-1">Application Deadline</label>
         <input
           type="date"
           name="applicationDeadline"
@@ -170,6 +177,7 @@ const CreateJob = () => {
           onChange={handleChange}
           className="w-full p-2 border border-gray-300 rounded"
         />
+        </div>
 
         {/* Skills */}
         <div>
