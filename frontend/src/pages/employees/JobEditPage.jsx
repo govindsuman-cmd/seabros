@@ -21,6 +21,7 @@ const JobEditPage = () => {
     { name: "jobVacancies", label: "Job Vacancies", type: "number" },
     { name: "salaryRange", label: "Salary Range", type: "text" },
     { name: "jobType", label: "Job Type", type: "text" },
+    { name: "applicationFee", label: "Application Fee", type: "text" },
     { name: "applicationDeadline", label: "Application Deadline", type: "date" },
   ];
 

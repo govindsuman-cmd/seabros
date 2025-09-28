@@ -24,6 +24,16 @@ const Step3 = ({ formData, setFormData }) => {
           className="w-full p-2 border rounded"
         />
       </label>
+      <label className="block">
+        Experience
+      <input
+        type="number"
+        placeholder="Experience*"
+        value={formData.experience}
+        onChange={(e) => setFormData({ ...formData, experience: e.target.value })}
+        className="border p-2 w-full rounded"
+      />
+      </label>
        <Select
       options={options}
       className="w-full p-2 border rounded"

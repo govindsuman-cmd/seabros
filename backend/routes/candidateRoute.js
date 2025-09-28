@@ -13,7 +13,7 @@ const {
   rejectCandidate,
 } = require("../controllers/candidateController");
 
-const { auth, isCustomer, isAdmin } = require("../middleware/authn");
+const { auth, isCustomer, isAdmin, authorizeRoles } = require("../middleware/authn");
 
 // 1️⃣ Step 1: Generate Razorpay order for candidate payment
 router.post("/create-candidate-order", createCandidatePaymentOrder);
@@ -30,11 +30,22 @@ router.post(
 );
 
 // Other candidate routes
-router.get("/get-single-candidate/:id", auth, getSingleCandidate);
-router.get("/get-all-candidate", auth, getAllCandidate);
-router.get("/get-candidate-jobwise/:jobId", auth, getCandidateJobWise);
-router.delete("/delete-candidate/:id", auth, deleteCandidate);
-router.put("/shortlist-candidate/:id", auth, shortlistCandidate);
-router.put("/reject-candidate/:id", auth, rejectCandidate);
+router.get("/get-single-candidate/:id", auth,
+  authorizeRoles('Admin', 'Employee'), getSingleCandidate);
+
+router.get("/get-all-candidate", auth, 
+  authorizeRoles('Admin', 'Employee'), getAllCandidate);
+
+router.get("/get-candidate-jobwise/:jobId", auth, 
+  authorizeRoles('Admin', 'Employee'), getCandidateJobWise);
+
+router.delete("/delete-candidate/:id", auth,
+  authorizeRoles('Admin', 'Employee'), deleteCandidate);
+
+router.put("/shortlist-candidate/:id", auth,
+  authorizeRoles('Admin', 'Employee'), shortlistCandidate);
+  
+router.put("/reject-candidate/:id", auth,
+  authorizeRoles('Admin', 'Employee'), rejectCandidate);
 
 module.exports = router;

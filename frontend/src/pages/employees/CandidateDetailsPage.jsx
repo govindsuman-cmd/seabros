@@ -13,7 +13,9 @@ const CandidateDetailsPage = () => {
     setLoading(true);
     try {
       const res = await axios.get(
-        `${import.meta.env.VITE_BASE_URL}/candidates/get-single-candidate/${candidateId}`
+        `${import.meta.env.VITE_BASE_URL}/candidates/get-single-candidate/${candidateId}`,{
+          headers: { Authorization: `Bearer ${localStorage.getItem("auth")}` }
+        }
       );
       setCandidate(res.data.candidate);
     } catch (error) {
@@ -38,7 +40,11 @@ const CandidateDetailsPage = () => {
           ? `${import.meta.env.VITE_BASE_URL}/candidates/shortlist-candidate/${candidateId}`
           : `${import.meta.env.VITE_BASE_URL}/candidates/reject-candidate/${candidateId}`;
 
-      await axios.put(endpoint);
+      await axios.put(endpoint, null, {
+  headers: {
+    Authorization: `Bearer ${localStorage.getItem("auth")}`,
+  },
+});
 
       setMessage(
         action === "approve"

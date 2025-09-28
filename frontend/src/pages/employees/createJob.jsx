@@ -11,6 +11,7 @@ const CreateJob = () => {
     requirements: [],
     location: "",
     salaryRange: "",
+    applicationFee: "",
     jobType: "",
     applicationDeadline: "",
     skills: [],
@@ -145,6 +146,15 @@ const CreateJob = () => {
 
         {/* Salary Range */}
         <input
+          type="text"
+          name="applicationFee"
+          value={jobData.applicationFee}
+          onChange={handleChange}
+          placeholder="Job Application Fee"
+          className="w-full p-2 border border-gray-300 rounded"
+        />
+
+         <input
           type="text"
           name="salaryRange"
           value={jobData.salaryRange}

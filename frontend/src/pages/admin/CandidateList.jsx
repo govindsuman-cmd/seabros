@@ -14,12 +14,18 @@ const CandidateList = () => {
 
   useEffect(() => {
     const fetchCandidates = async () => {
+      const token = localStorage.getItem("auth");
+      if (!token) {
+        setError("No authentication token found. Please log in.");
+        setLoading(false);
+        return;
+      }
       try {
         setLoading(true);
         const response = await axios.get(
-          `${import.meta.env.VITE_BASE_URL}/candidates/get-all-candidate`,
-          {
-            params: { page, limit, order },
+          `${import.meta.env.VITE_BASE_URL}/candidates/get-all-candidate`,{
+            headers: { Authorization: `Bearer ${token}`},
+             params: { page, limit, order },
           }
         );
 

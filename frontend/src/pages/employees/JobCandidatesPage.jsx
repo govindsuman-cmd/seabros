@@ -17,7 +17,9 @@ const JobCandidatesPage = () => {
     setLoading(true);
     try {
       const res = await axios.get(
-        `${import.meta.env.VITE_BASE_URL}/candidates/get-candidate-jobwise/${jobId}?page=${page}&limit=${limit}&order=${order}`
+        `${import.meta.env.VITE_BASE_URL}/candidates/get-candidate-jobwise/${jobId}?page=${page}&limit=${limit}&order=${order}`,{
+          headers: { Authorization: `Bearer ${localStorage.getItem("auth")}`}
+        }
       );
       setCandidates(res.data.data);
       console.log("Fetched Candidates:", res.data.data);
