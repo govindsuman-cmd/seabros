@@ -166,3 +166,56 @@ exports.deleteJob = async (req, res, next) => {
     }
 }
 
+// Search Jobs by title (case-insensitive partial match)
+exports.searchJobs = async (req, res) => {
+  try {
+    const { title, location, skill } = req.query; // e.g., ?title=developer&location=Delhi&skill=React
+
+    // If no query params provided, return 400
+    if (!title && !location && !skill) {
+      return res.status(400).json({
+        success: false,
+        message: "At least one search query (title, location, or skill) is required",
+      });
+    }
+
+    // Build search filter dynamically
+    let filter = {};
+
+    if (title) {
+      filter.title = { $regex: title.trim(), $options: "i" };
+    }
+    if (location) {
+      filter.location = { $regex: location.trim(), $options: "i" };
+    }
+    if (skill) {
+      filter.skills = { $regex: skill.trim(), $options: "i" };
+    }
+
+    // Fetch jobs
+    const jobs = await Job.find(filter).sort({ createdAt: -1 });
+
+    if (!jobs || jobs.length === 0) {
+      return res.status(200).json({
+        success: true,
+        total: 0,
+        data: [],
+        message: "No jobs found",
+      });
+    }
+
+    return res.status(200).json({
+      success: true,
+      total: jobs.length,
+      data: jobs,
+    });
+  } catch (error) {
+    res.status(500).json({
+      success: false,
+      message: "Error searching jobs",
+      error: error.message,
+    });
+  }
+};
+
+

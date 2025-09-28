@@ -283,3 +283,41 @@ exports.rejectCandidate = async (req, res, next) => {
     });
   }
 };
+
+// Search candidates by name
+exports.searchCandidates = async (req, res) => {
+  try {
+    const { name } = req.query; // ?name=John
+    if (!name || !name.trim()) {
+      return res.status(400).json({ success: false, message: "Name query is required" });
+    }
+
+    // Case-insensitive partial match, most-recent first
+    const candidates = await Candidate.find({
+      name: { $regex: name.trim(), $options: "i" }
+    }).sort({ createdAt: -1 });
+
+    // If no matches, return success with empty array (frontend handles "No candidates found")
+    if (!candidates || candidates.length === 0) {
+      return res.status(200).json({
+        success: true,
+        total: 0,
+        data: [],
+        message: "No candidates found"
+      });
+    }
+
+    return res.status(200).json({
+      success: true,
+      total: candidates.length,
+      data: candidates,
+    });
+  } catch (error) {
+    return res.status(500).json({
+      success: false,
+      message: "Error searching candidates",
+      error: error.message,
+    });
+  }
+};
+

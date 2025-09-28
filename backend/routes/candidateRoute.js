@@ -11,6 +11,7 @@ const {
   deleteCandidate,
   shortlistCandidate,
   rejectCandidate,
+  searchCandidates,
 } = require("../controllers/candidateController");
 
 const { auth, isCustomer, isAdmin, authorizeRoles } = require("../middleware/authn");
@@ -47,5 +48,8 @@ router.put("/shortlist-candidate/:id", auth,
   
 router.put("/reject-candidate/:id", auth,
   authorizeRoles('Admin', 'Employee'), rejectCandidate);
+
+router.get("/search-candidate", auth,
+  authorizeRoles('Admin', 'Employee'), searchCandidates);
 
 module.exports = router;
