@@ -24,6 +24,8 @@ import Disclaimer from "./pages/quicklinks/Disclaimer";
 import TermsAndConditions from "./pages/quicklinks/TermsAndCondition";
 import ReturnPolicy from "./pages/quicklinks/ReturnPolicy";
 import JobEditPage from "./pages/employees/JobEditPage";
+import ChangePassword from "./ChangePassword";
+import AutoLogout from "./AutoLogout";
 
 // Auth Helpers
 const isAuthenticated = () => {
@@ -52,6 +54,7 @@ function App() {
   return (
     <Router>
       <Layout>
+        <AutoLogout /> 
         <Routes>
           {/* Public Routes */}
           <Route path="/" element={<ComingSoonPage />} />
@@ -67,6 +70,7 @@ function App() {
           <Route path="/terms-and-conditions" element={<TermsAndConditions />} />
           <Route path="/disclaimer" element={<Disclaimer />} />
           <Route path="/return-policy" element={<ReturnPolicy/>} />
+          <Route path="/change-password" element={<ChangePassword/>} />
           <Route path="*" element={<h1>404 Not Found</h1>} />
           {/* 🔒 Reserved Routes for Admin + Employee */}
           <Route

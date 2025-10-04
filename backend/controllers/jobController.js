@@ -31,28 +31,32 @@ exports.createJob = async (req, res, next) => {
 };
 
 exports.getAllJobs = async (req, res, next) => {
-    try {
+  try {
     const page = parseInt(req.query.page) || 1;
     const limit = parseInt(req.query.limit) || 10;
     const order = parseInt(req.query.order) || -1; // +1 => oldest first, -1 => latest first
     const skip = (page - 1) * limit;
 
-    const jobs = await Job.find().skip(skip)
+    const totalJobs = await Job.countDocuments(); // <-- total count
+    const jobs = await Job.find()
       .sort({ createdAt: order })
+      .skip(skip)
       .limit(limit);
-        res.status(200).json({
-            success: true,
-            count: jobs.length,
-            data: jobs
-        });
-    } catch (error) {
-       res.status(500).json({
+
+    res.status(200).json({
+      success: true,
+      totalCount: totalJobs,   // <-- send total count
+      data: jobs
+    });
+  } catch (error) {
+    res.status(500).json({
       success: false,
-      message: "Error fetching candidates",
+      message: "Error fetching jobs",
       error: error.message,
     });
-    }   
+  }   
 };
+
 
 exports.getSingleJob = async (req, res, next) => {
   try {

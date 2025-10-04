@@ -1,16 +1,19 @@
-// pages/auth/Login.jsx
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
+import { FaEye, FaEyeSlash } from "react-icons/fa";
 
 const Login = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
+  const [loading, setLoading] = useState(false);
+  const [showPassword, setShowPassword] = useState(false);
   const navigate = useNavigate();
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    setLoading(true);
     setError("");
 
     try {
@@ -23,28 +26,27 @@ const Login = () => {
       if (res.data.success) {
         const { token, user } = res.data;
 
-        // Store in localStorage
         localStorage.setItem("auth", token);
-        localStorage.setItem("role", user.role);
+  localStorage.setItem("role", user.role);
+  localStorage.setItem("loginTime", Date.now());
+        setLoading(false);
 
-        // Redirect based on role
         if (user.role === "Admin") {
-          navigate("/candidates"); // example admin page
+          navigate("/candidates");
         } else if (user.role === "Employee") {
-          navigate("/jobs"); // employee main page
+          navigate("/jobs");
         } else if (user.role === "Customer") {
-          navigate("/home"); // or customer landing
+          navigate("/home");
         } else {
-          navigate("/"); // fallback
+          navigate("/");
         }
-        // After successful login
-setTimeout(() => {
-  localStorage.removeItem("auth");
-  localStorage.removeItem("role");
-  localStorage.removeItem("expiry");
-  navigate("/login");
-}, 2 * 60 * 60 * 1000);
 
+        setTimeout(() => {
+          localStorage.removeItem("auth");
+          localStorage.removeItem("role");
+          localStorage.removeItem("expiry");
+          navigate("/login");
+        }, 2 * 60 * 60 * 1000);
       } else {
         setError(res.data.message || "Login failed");
       }
@@ -65,6 +67,7 @@ setTimeout(() => {
         )}
 
         <form onSubmit={handleSubmit} className="space-y-4">
+          {/* Email */}
           <div>
             <label className="block text-sm font-medium text-gray-700">
               Email
@@ -79,25 +82,35 @@ setTimeout(() => {
             />
           </div>
 
-          <div>
+          {/* Password with Eye Toggle */}
+          <div className="relative">
             <label className="block text-sm font-medium text-gray-700">
               Password
             </label>
             <input
-              type="password"
+              type={showPassword ? "text" : "password"}
               value={password}
               onChange={(e) => setPassword(e.target.value)}
               required
-              className="mt-1 block w-full px-3 py-2 border rounded-lg shadow-sm focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
+              className="mt-1 block w-full px-3 py-2 border rounded-lg shadow-sm focus:ring-blue-500 focus:border-blue-500 sm:text-sm pr-10"
               placeholder="Enter your password"
             />
+            <button
+              type="button"
+              onClick={() => setShowPassword(!showPassword)}
+              className="absolute inset-y-0 right-0 pr-3 flex items-center text-gray-500 mt-6"
+            >
+              {showPassword ? <FaEyeSlash /> : <FaEye />}
+            </button>
           </div>
 
+          {/* Submit */}
           <button
             type="submit"
+            disabled={loading}
             className="w-full bg-blue-600 text-white py-2 rounded-lg hover:bg-blue-700 transition"
           >
-            Login
+            {loading ? "Logging in..." : "Login"}
           </button>
         </form>
       </div>

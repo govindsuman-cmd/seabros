@@ -1,6 +1,6 @@
 export default function Contact() {
   return (
-    <div className="min-h-screen bg-gray-50 flex items-center justify-center px-6 py-12">
+    <div className="min-h-screen flex items-center justify-center px-6 py-12">
       <div className="w-full max-w-lg bg-white rounded-2xl shadow-lg p-8 text-center">
         <h2 className="text-3xl font-bold text-gray-800 mb-4">Contact Us</h2>
         <p className="text-gray-600 mb-8">

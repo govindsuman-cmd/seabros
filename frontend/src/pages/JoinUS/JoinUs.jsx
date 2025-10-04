@@ -124,7 +124,7 @@ const JoinUs = () => {
   };
 
   return (
-    <div className="max-w-lg mx-auto bg-gray-100 p-6 mt-10 shadow-md rounded">
+    <div className="max-w-lg mx-auto bg-blue-100 p-6 mt-10 shadow-md rounded">
       <h2 className="text-2xl font-bold mb-4 text-center">Join Us</h2>
       <ProgressBar step={step} />
 
